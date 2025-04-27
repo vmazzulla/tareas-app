@@ -1,0 +1,309 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap');
+
+/* 🌍 Variables globales */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333;
+    --task-bg: #ececec;
+    --border-color: #d4d4d4;
+    --button-bg: #007bff;
+    --button-hover: #0056b3;
+    --modal-bg: #ffffff;
+    --modal-text: #333;
+}
+
+/* 📌 Variables para modo oscuro */
+[data-theme="dark"] {
+    --bg-color: #181818;
+    --text-color: #f5f5f5;
+    --task-bg: #444;
+    --border-color: #555;
+    --button-bg: #444;
+    --button-hover: #666;
+    --modal-bg: #222;
+    --modal-text: #f5f5f5;
+}
+
+/* 📌 Fuente global */
+* {
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 🏠 Contenedor principal */
+.task-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* 📌 Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    background-color: #007bff;
+    color: white;
+    height: 3.8rem;
+}
+
+h1 {
+    margin: 0;
+}
+
+/* 🎭 Pestañas */
+.tab-link {
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    color: white;
+    border-radius: 0.5rem;
+    transition: 0.3s;
+    margin: 0 0.5rem;
+}
+
+.tab-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 🔄 Layout */
+.layout {
+    display: flex;
+    padding: 0;
+    min-height: calc(100vh - 5rem);
+}
+
+/* 📌 Sidebar de categorías */
+.sidebar {
+    width: 12%;
+    min-width: 7rem;
+    padding: 1rem;
+    border-right: 1px solid var(--border-color);
+}
+
+.category-button {
+    display: block;
+    padding: 0.2rem 0.5rem;
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    width: 100%;
+    text-align: left;
+    background: none;
+    color: var(--text-color);
+}
+
+.category-button:hover,
+.category-button.active {
+    background-color: var(--task-bg);
+}
+
+/* 📝 Contenido de tareas */
+.task-content {
+    width: 100%;
+    padding: 1rem;
+}
+
+ul {
+    padding: 0;
+}
+
+/* 📌 Pestañas de tareas */
+.task-tabs {
+    display: flex;
+    margin-bottom: 1rem;
+    justify-content: center;
+}
+
+.task-tabs .tab-button {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-bottom: transparent solid 2px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+    color: var(--text-color);
+    background: none;
+}
+
+.task-tabs .tab-button:hover,
+.task-tabs .tab-button.active {
+    border-bottom: var(--text-color) solid 2px;
+}
+
+/* 📌 Botón de nueva tarea */
+.new-task-button {
+    display: block;
+    margin: 1rem 0;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    background-color: var(--button-bg);
+    color: white;
+    transition: background-color 0.3s ease;
+    width: 8rem;
+}
+
+.new-task-button:hover {
+    background-color: var(--button-hover);
+}
+
+/* 📌 Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: var(--modal-bg);
+    color: var(--modal-text);
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    width: 80%;
+    max-width: 25rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+h2 {
+    margin: 0;
+    margin-bottom: 0.5rem;
+}
+
+.modal-content input,
+.modal-content select,
+.modal-content textarea,
+.modal-content input[type="date"] {
+    background: var(--modal-bg);
+    color: var(--modal-text);
+    border: 1px solid var(--border-color);
+    padding: 0.6rem;
+    margin-top: 0.5rem;
+    border-radius: 0.4rem;
+}
+
+.modal-content textarea {
+    height: 5rem;
+}
+
+/* 📌 Botones en el modal */
+.add-button,
+.close-button {
+    background: var(--button-bg);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.add-button:hover,
+.close-button:hover {
+    background-color: var(--button-hover);
+}
+
+/* 📌 Estilo de las tareas */
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem;
+    border: var(--border-color) solid 1px;
+    background-color: var(--task-bg);
+    margin-bottom: 0.5rem;
+    border-radius: 0.4rem;
+    align-items: center;
+    cursor: pointer;
+}
+
+.task-item.completed {
+    opacity: 0.8;
+}
+
+/* 📌 Círculo de tareas */
+.task-circle {
+    cursor: pointer;
+    font-size: 1.4rem;
+    border-radius: 100%;
+    padding: 0;
+    transition: 0.3s;
+}
+
+.task-circle:hover {
+    scale: 1.2;
+}
+
+/* 📌 Botón de tema */
+.theme-toggle {
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background-color: var(--button-hover);
+}
+
+/* 📌 Estilos del input para agregar categoría */
+.nueva-categoria {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.nueva-categoria input {
+    width: 100%;
+    padding: 0.2rem;
+    margin-top: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.3rem;
+    background: var(--task-bg);
+    color: var(--text-color);
+    transition: 0.3s ease;
+}
+
+.add-category-input:focus {
+    outline: none;
+    border-color: var(--button-bg);
+}
+
+/* 📌 Botón para agregar una nueva categoría */
+.add-category {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.4rem;
+    margin-top: 0.5rem;
+    border: none;
+    border-radius: 0.3rem;
+    background-color: var(--border-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: 0.3s ease;
+    line-height: 0;
+}
+
+.category {
+    color :#007bff;
+    font-weight: 600;
+}
