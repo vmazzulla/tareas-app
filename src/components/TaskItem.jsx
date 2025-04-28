@@ -15,8 +15,8 @@ function TaskItem({ task, onComplete, onEdit, onDelete }) {
             </span>
 
             <span>
-                {task.name}{" "}
-                <span className="category">#{task.category}</span>
+                ▹ {task.name}{" "}
+                <span className="category"> #{task.category}</span>
             </span>
 
             <span className="due-date">

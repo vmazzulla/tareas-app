@@ -6,7 +6,8 @@ import Modal from "./Modal";
 import TaskForm from "./TaskForm";
 import Tabs from "./Tabs";
 import TaskListSection from "../components/TaskListSection";
-import useTaskManager from "../hooks/useTaskManager";  // Usamos el hook
+import CalendarView from "../components/CalendarView"; // Importar el calendario
+import useTaskManager from "../hooks/useTaskManager";
 
 function TaskList() {
   const {
@@ -19,6 +20,7 @@ function TaskList() {
     deleteTask,
     toggleTaskCompletion,
     addCategory,
+    deleteCategory,
   } = useTaskManager();
 
   const [showModal, setShowModal] = useState(false);
@@ -30,6 +32,7 @@ function TaskList() {
   const [activeCategory, setActiveCategory] = useState("Todas");
   const [editTaskData, setEditTaskData] = useState(null);
   const [newCategory, setNewCategory] = useState("");
+  const [showCalendar, setShowCalendar] = useState(false); // Nuevo estado para alternar entre tareas y calendario
 
   const filteredTasks = tasks
     .filter(task => (activeTab === "Pendientes" ? !task.completed : task.completed))
@@ -82,6 +85,10 @@ function TaskList() {
     setNewCategory("");
   };
 
+  const handleToggleCalendar = (showCalendarView) => {
+    setShowCalendar(showCalendarView);
+  };
+
   return (
     <div className="task-container">
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -94,23 +101,31 @@ function TaskList() {
           newCategory={newCategory}
           setNewCategory={setNewCategory}
           onAddCategory={handleAddCategory}
+          onDeleteCategory={deleteCategory}
+          onToggleCalendar={handleToggleCalendar} // Nuevo
         />
 
         <main className="task-content">
-          <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
+          {showCalendar ? (
+            <CalendarView tasks={tasks} />
+          ) : (
+            <>
+              <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
 
-          <button className="new-task-button" onClick={() => setShowModal(!showModal)}>
-            Nueva tarea
-          </button>
+              <button className="new-task-button" onClick={() => setShowModal(!showModal)}>
+                Nueva tarea
+              </button>
 
-          <TaskListSection
-            tasks={filteredTasks}
-            activeTab={activeTab}
-            activeCategory={activeCategory}
-            onComplete={toggleTaskCompletion}
-            onEdit={handleEditTask}
-            onDelete={deleteTask}
-          />
+              <TaskListSection
+                tasks={filteredTasks}
+                activeTab={activeTab}
+                activeCategory={activeCategory}
+                onComplete={toggleTaskCompletion}
+                onEdit={handleEditTask}
+                onDelete={deleteTask}
+              />
+            </>
+          )}
 
           {showModal && (
             <Modal>

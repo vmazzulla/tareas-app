@@ -10,6 +10,7 @@
     --button-hover: #0056b3;
     --modal-bg: #ffffff;
     --modal-text: #333;
+    --sidebar-btn-hover: #c2c2c2;
 }
 
 /* 📌 Variables para modo oscuro */
@@ -18,10 +19,11 @@
     --text-color: #f5f5f5;
     --task-bg: #444;
     --border-color: #555;
-    --button-bg: #444;
+    --button-bg: #007bff;
     --button-hover: #666;
     --modal-bg: #222;
     --modal-text: #f5f5f5;
+    --sidebar-btn-hover: #646464;
 }
 
 /* 📌 Fuente global */
@@ -86,22 +88,50 @@ h1 {
     border-right: 1px solid var(--border-color);
 }
 
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0.3rem;
+    padding: 0 0.3rem;
+    margin-bottom: 0.5rem;
+}
+
 .category-button {
     display: block;
-    padding: 0.2rem 0.5rem;
     border: none;
-    border-radius: 0.3rem;
+    margin: 0.3rem 0;
     cursor: pointer;
-    margin-bottom: 0.5rem;
     width: 100%;
     text-align: left;
     background: none;
     color: var(--text-color);
 }
 
-.category-button:hover,
-.category-button.active {
+.category-item:hover,
+.category-item.active {
     background-color: var(--task-bg);
+}
+
+/* 🗑️ Botón para eliminar categoría */
+.delete-category-btn {
+    background: none;
+    color: var(--text-color);
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0;
+    transition: 0.3s;
+    line-height: 1.2;
+}
+
+.category-item:hover .delete-category-btn {
+    opacity: 1;
+}
+
+.delete-category-btn:hover {
+    background-color: var(--sidebar-btn-hover);
 }
 
 /* 📝 Contenido de tareas */
@@ -304,6 +334,128 @@ h2 {
 }
 
 .category {
-    color :#007bff;
+    color: #007bff;
     font-weight: 600;
 }
+
+/* 📅 Estilos del calendario */
+.calendar-view {
+    padding: 1rem;
+}
+
+.calendar-view h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.calendar-weekday {
+    text-align: center;
+    font-weight: bold;
+    color: var(--text-color);
+    padding: 0.3rem;
+    background-color: var(--task-bg);
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
+}
+
+.calendar-day {
+    background-color: var(--task-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    min-height: 6rem;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+}
+
+.calendar-day.today {
+    border-color: var(--button-bg);
+    border-width: 2px;
+}
+
+.calendar-day.prev-month,
+.calendar-day.next-month {
+    opacity: 0.4;
+}
+
+.day-number {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.calendar-view .tasks-list {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.calendar-view .task-item {
+    background-color: var(--button-bg);
+    color: white;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.3rem;
+    font-size: 0.8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 🗓️ Ajustes para responsive */
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .calendar-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* 📅 Botones de navegación */
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.left-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.right-buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.calendar-btns {
+    background-color: var(--button-bg);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+

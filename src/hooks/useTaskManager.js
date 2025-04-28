@@ -59,6 +59,13 @@ const useTaskManager = () => {
     }
   };
 
+  // Función para eliminar una categoría
+  const deleteCategory = (categoryToDelete) => {
+    const updatedCategories = categories.filter(cat => cat !== categoryToDelete);
+    setCategories(updatedCategories);
+    localStorage.setItem("categories", JSON.stringify(updatedCategories));
+  };
+
   return {
     tasks,
     categories,
@@ -69,6 +76,7 @@ const useTaskManager = () => {
     deleteTask,
     toggleTaskCompletion,
     addCategory,
+    deleteCategory, // Agregar la función de eliminación de categoría
   };
 };
 
