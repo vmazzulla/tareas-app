@@ -262,10 +262,20 @@ h2 {
     border-radius: 0.4rem;
     align-items: center;
     cursor: pointer;
+    gap: 0.5rem; /* 🎯 NUEVO: un poco de espacio entre elementos */
 }
 
 .task-item.completed {
     opacity: 0.8;
+}
+
+/* 🎯 NUEVO: Agrupación de círculo + nombre + categoría */
+.task-main-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1; /* ocupa el máximo espacio disponible */
+    overflow: hidden;
 }
 
 /* 📌 Círculo de tareas */
@@ -280,6 +290,43 @@ h2 {
 .task-circle:hover {
     scale: 1.2;
 }
+
+/* 🎯 NUEVO: Nombre de la tarea */
+.task-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 🎯 NUEVO: Cuando la tarea esté completada, el nombre se tachará */
+.task-item.completed .task-name {
+    text-decoration: line-through;
+    color: #888; /* color gris cuando está tachado */
+}
+
+/* 📌 Categoría dentro del nombre */
+.category {
+    color: #007bff;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-left: 0.3rem;
+}
+
+/* 📅 Fecha de vencimiento */
+.due-date {
+    font-size: 0.8rem;
+    color: var(--text-color);
+}
+
+/* 📌 Botón de eliminar tarea */
+.delete-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+
 
 /* 📌 Botón de tema */
 .theme-toggle {

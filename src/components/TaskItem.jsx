@@ -4,20 +4,22 @@ function TaskItem({ task, onComplete, onEdit, onDelete }) {
             className={`task-item ${task.completed ? "completed" : ""}`}
             onClick={() => onEdit()}
         >
-            <span
-                className="task-circle"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onComplete();
-                }}
-            >
-                {task.completed ? "🟢" : "⚪"}
-            </span>
+            <div className="task-main-info">
+                <span
+                    className="task-circle"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onComplete();
+                    }}
+                >
+                    {task.completed ? "🟢" : "⚪"}
+                </span>
 
-            <span>
-                ▹ {task.name}{" "}
-                <span className="category"> #{task.category}</span>
-            </span>
+                <span className="task-name">
+                    {task.name}
+                    <span className="category"> #{task.category}</span>
+                </span>
+            </div>
 
             <span className="due-date">
                 📅 {task.dueDate || "Sin fecha"}
