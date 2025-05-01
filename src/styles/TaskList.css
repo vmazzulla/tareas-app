@@ -208,12 +208,13 @@ ul {
     width: 80%;
     max-width: 25rem;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    text-align: center;
+    text-align: left;
     display: flex;
     flex-direction: column;
 }
 
 h2 {
+    text-align: center;
     margin: 0;
     margin-bottom: 0.5rem;
 }
@@ -230,8 +231,15 @@ h2 {
     border-radius: 0.4rem;
 }
 
+.modal-content label{
+    
+    margin-top: 1rem;
+    color: var(--modal-text);
+}
+
 .modal-content textarea {
     height: 5rem;
+    resize: vertical;
 }
 
 /* 📌 Botones en el modal */
@@ -244,6 +252,12 @@ h2 {
     cursor: pointer;
     margin-top: 0.5rem;
     transition: background-color 0.3s ease;
+    text-align: center;
+    border-radius: 0.5rem;
+}
+
+.add-button{
+    margin-top: 2rem;
 }
 
 .add-button:hover,
@@ -506,3 +520,18 @@ h2 {
     transition: background-color 0.3s;
 }
 
+.count {
+    font-weight: 600;
+    font-size: 0.7rem;
+    margin-left: 4px;
+    color: #007bff;
+    border: #007bff solid 2px;
+    border-radius: 100%;
+    display: inline-block;
+    width: 1rem;
+    height: 0,6rem;
+    padding: 0.3rem;
+    padding-top: 0.35rem;
+  }
+  
+  

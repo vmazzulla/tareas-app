@@ -25,6 +25,13 @@ function TaskItem({ task, onComplete, onEdit, onDelete }) {
                 📅 {task.dueDate || "Sin fecha"}
             </span>
 
+            {/* Mostrar la fecha de notificación si existe */}
+            {task.notificationDateTime && (
+                <span className="notification-time">
+                    ⏰ Recordatorio: {new Date(task.notificationDateTime).toLocaleString()}
+                </span>
+            )}
+
             <button
                 className="delete-button"
                 onClick={(e) => {

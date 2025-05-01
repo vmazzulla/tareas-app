@@ -1,3 +1,4 @@
+// src/components/TaskList.jsx
 import { useState, useEffect } from "react";
 import "../styles/TaskList.css";
 import Header from "./Header";
@@ -6,8 +7,8 @@ import Modal from "./Modal";
 import TaskForm from "./TaskForm";
 import Tabs from "./Tabs";
 import TaskListSection from "../components/TaskListSection";
-import CalendarView from "../components/CalendarView"; // Importar el calendario
-import useTaskManager from "../hooks/useTaskManager";
+import CalendarView from "../components/CalendarView";
+import { useTaskManagerContext } from "../context/TaskManagerContext";
 
 function TaskList() {
   const {
@@ -21,18 +22,20 @@ function TaskList() {
     toggleTaskCompletion,
     addCategory,
     deleteCategory,
-  } = useTaskManager();
+  } = useTaskManagerContext();
 
   const [showModal, setShowModal] = useState(false);
   const [newTask, setNewTask] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Trabajo");
   const [dueDate, setDueDate] = useState("");
+  const [notificationDateTime, setNotificationDateTime] = useState(""); // NUEVO
+
   const [activeTab, setActiveTab] = useState("Pendientes");
   const [activeCategory, setActiveCategory] = useState("Todas");
   const [editTaskData, setEditTaskData] = useState(null);
   const [newCategory, setNewCategory] = useState("");
-  const [showCalendar, setShowCalendar] = useState(false); // Nuevo estado para alternar entre tareas y calendario
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const filteredTasks = tasks
     .filter(task => (activeTab === "Pendientes" ? !task.completed : task.completed))
@@ -43,10 +46,11 @@ function TaskList() {
     document.body.setAttribute("data-theme", theme);
   }, [theme]);
 
-  const handleInputChange = (event) => setNewTask(event.target.value);
-  const handleDescriptionChange = (event) => setDescription(event.target.value);
-  const handleCategoryChange = (event) => setCategory(event.target.value);
-  const handleDateChange = (event) => setDueDate(event.target.value);
+  const handleInputChange = (e) => setNewTask(e.target.value);
+  const handleDescriptionChange = (e) => setDescription(e.target.value);
+  const handleCategoryChange = (e) => setCategory(e.target.value);
+  const handleDateChange = (e) => setDueDate(e.target.value);
+  const handleNotificationChange = (e) => setNotificationDateTime(e.target.value); // NUEVO
 
   const handleSubmit = () => {
     if (newTask.trim() !== "") {
@@ -55,6 +59,7 @@ function TaskList() {
         name: newTask,
         category,
         dueDate: dueDate || "2099-12-31",
+        notificationDateTime: notificationDateTime || null, // NUEVO
         description,
         completed: false,
       };
@@ -63,6 +68,7 @@ function TaskList() {
       setDescription("");
       setCategory("Trabajo");
       setDueDate("");
+      setNotificationDateTime(""); // NUEVO
       setShowModal(false);
     }
   };
@@ -80,6 +86,7 @@ function TaskList() {
   };
 
   const handleCloseEditModal = () => setEditTaskData(null);
+
   const handleAddCategory = () => {
     addCategory(newCategory);
     setNewCategory("");
@@ -92,7 +99,6 @@ function TaskList() {
   return (
     <div className="task-container">
       <Header theme={theme} toggleTheme={toggleTheme} />
-
       <div className="layout">
         <Sidebar
           categories={categories}
@@ -102,20 +108,17 @@ function TaskList() {
           setNewCategory={setNewCategory}
           onAddCategory={handleAddCategory}
           onDeleteCategory={deleteCategory}
-          onToggleCalendar={handleToggleCalendar} // Nuevo
+          onToggleCalendar={handleToggleCalendar}
         />
-
         <main className="task-content">
           {showCalendar ? (
             <CalendarView tasks={tasks} />
           ) : (
             <>
               <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
-
               <button className="new-task-button" onClick={() => setShowModal(!showModal)}>
                 Nueva tarea
               </button>
-
               <TaskListSection
                 tasks={filteredTasks}
                 activeTab={activeTab}
@@ -134,11 +137,13 @@ function TaskList() {
                 description={description}
                 category={category}
                 dueDate={dueDate}
+                notificationDateTime={notificationDateTime} // NUEVO
                 categories={categories}
                 onNameChange={handleInputChange}
                 onDescriptionChange={handleDescriptionChange}
                 onCategoryChange={handleCategoryChange}
                 onDateChange={handleDateChange}
+                onNotificationChange={handleNotificationChange} // NUEVO
                 onSubmit={handleSubmit}
                 onClose={() => setShowModal(false)}
                 isEditing={false}
@@ -153,11 +158,13 @@ function TaskList() {
                 description={editTaskData.description || ""}
                 category={editTaskData.category}
                 dueDate={editTaskData.dueDate}
+                notificationDateTime={editTaskData.notificationDateTime || ""} // NUEVO
                 categories={categories}
                 onNameChange={(e) => setEditTaskData({ ...editTaskData, name: e.target.value })}
                 onDescriptionChange={(e) => setEditTaskData({ ...editTaskData, description: e.target.value })}
                 onCategoryChange={(e) => setEditTaskData({ ...editTaskData, category: e.target.value })}
                 onDateChange={(e) => setEditTaskData({ ...editTaskData, dueDate: e.target.value })}
+                onNotificationChange={(e) => setEditTaskData({ ...editTaskData, notificationDateTime: e.target.value })} // NUEVO
                 onSubmit={handleSaveEdit}
                 onClose={handleCloseEditModal}
                 isEditing={true}
