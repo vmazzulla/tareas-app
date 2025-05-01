@@ -96,6 +96,14 @@ function TaskList() {
     setShowCalendar(showCalendarView);
   };
 
+  const handleTaskDateChange = (taskId, newDate) => {
+    const taskToUpdate = tasks.find(task => task.id === taskId);
+    if (taskToUpdate) {
+      editTask({ ...taskToUpdate, dueDate: newDate });
+    }
+  };
+  
+
   return (
     <div className="task-container">
       <Header theme={theme} toggleTheme={toggleTheme} />
@@ -112,7 +120,7 @@ function TaskList() {
         />
         <main className="task-content">
           {showCalendar ? (
-            <CalendarView tasks={tasks} />
+            <CalendarView tasks={tasks} onTaskDateChange={handleTaskDateChange} />
           ) : (
             <>
               <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
