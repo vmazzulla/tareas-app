@@ -20,7 +20,7 @@
     --task-bg: #444;
     --border-color: #555;
     --button-bg: #007bff;
-    --button-hover: #666;
+    --button-hover: #0056b3;
     --modal-bg: #222;
     --modal-text: #f5f5f5;
     --sidebar-btn-hover: #646464;
@@ -98,12 +98,18 @@ h1 {
 
 .sidebar-buttons .tasks-button,
 .sidebar-buttons .calendar-button {
-    background-color: #007bff;
+    background-color: var(--button-bg);
     border: none;
     border-radius: 0.4rem;
     margin: 0.2rem;
     padding: 0.3rem;
     color: white;
+    cursor: pointer;
+}
+
+.sidebar-buttons .tasks-button:hover,
+.sidebar-buttons .calendar-button:hover {
+    background-color: var(--button-hover);
 }
 
 .category-item {
