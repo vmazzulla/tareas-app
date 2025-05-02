@@ -1,7 +1,6 @@
 // src/components/TaskList.jsx
 import { useState, useEffect } from "react";
 import "../styles/TaskList.css";
-import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Modal from "./Modal";
 import TaskForm from "./TaskForm";
@@ -15,7 +14,6 @@ function TaskList() {
     tasks,
     categories,
     theme,
-    toggleTheme,
     addTask,
     editTask,
     deleteTask,
@@ -29,7 +27,7 @@ function TaskList() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("Trabajo");
   const [dueDate, setDueDate] = useState("");
-  const [notificationDateTime, setNotificationDateTime] = useState(""); // NUEVO
+  const [notificationDateTime, setNotificationDateTime] = useState("");
 
   const [activeTab, setActiveTab] = useState("Pendientes");
   const [activeCategory, setActiveCategory] = useState("Todas");
@@ -50,7 +48,7 @@ function TaskList() {
   const handleDescriptionChange = (e) => setDescription(e.target.value);
   const handleCategoryChange = (e) => setCategory(e.target.value);
   const handleDateChange = (e) => setDueDate(e.target.value);
-  const handleNotificationChange = (e) => setNotificationDateTime(e.target.value); // NUEVO
+  const handleNotificationChange = (e) => setNotificationDateTime(e.target.value);
 
   const handleSubmit = () => {
     if (newTask.trim() !== "") {
@@ -59,7 +57,7 @@ function TaskList() {
         name: newTask,
         category,
         dueDate: dueDate || "2099-12-31",
-        notificationDateTime: notificationDateTime || null, // NUEVO
+        notificationDateTime: notificationDateTime || null,
         description,
         completed: false,
       };
@@ -68,7 +66,7 @@ function TaskList() {
       setDescription("");
       setCategory("Trabajo");
       setDueDate("");
-      setNotificationDateTime(""); // NUEVO
+      setNotificationDateTime("");
       setShowModal(false);
     }
   };
@@ -102,11 +100,9 @@ function TaskList() {
       editTask({ ...taskToUpdate, dueDate: newDate });
     }
   };
-  
 
   return (
     <div className="task-container">
-      <Header theme={theme} toggleTheme={toggleTheme} />
       <div className="layout">
         <Sidebar
           categories={categories}
@@ -145,13 +141,13 @@ function TaskList() {
                 description={description}
                 category={category}
                 dueDate={dueDate}
-                notificationDateTime={notificationDateTime} // NUEVO
+                notificationDateTime={notificationDateTime}
                 categories={categories}
                 onNameChange={handleInputChange}
                 onDescriptionChange={handleDescriptionChange}
                 onCategoryChange={handleCategoryChange}
                 onDateChange={handleDateChange}
-                onNotificationChange={handleNotificationChange} // NUEVO
+                onNotificationChange={handleNotificationChange}
                 onSubmit={handleSubmit}
                 onClose={() => setShowModal(false)}
                 isEditing={false}
@@ -166,13 +162,13 @@ function TaskList() {
                 description={editTaskData.description || ""}
                 category={editTaskData.category}
                 dueDate={editTaskData.dueDate}
-                notificationDateTime={editTaskData.notificationDateTime || ""} // NUEVO
+                notificationDateTime={editTaskData.notificationDateTime || ""}
                 categories={categories}
                 onNameChange={(e) => setEditTaskData({ ...editTaskData, name: e.target.value })}
                 onDescriptionChange={(e) => setEditTaskData({ ...editTaskData, description: e.target.value })}
                 onCategoryChange={(e) => setEditTaskData({ ...editTaskData, category: e.target.value })}
                 onDateChange={(e) => setEditTaskData({ ...editTaskData, dueDate: e.target.value })}
-                onNotificationChange={(e) => setEditTaskData({ ...editTaskData, notificationDateTime: e.target.value })} // NUEVO
+                onNotificationChange={(e) => setEditTaskData({ ...editTaskData, notificationDateTime: e.target.value })}
                 onSubmit={handleSaveEdit}
                 onClose={handleCloseEditModal}
                 isEditing={true}
