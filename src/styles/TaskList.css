@@ -88,6 +88,24 @@ h1 {
     border-right: 1px solid var(--border-color);
 }
 
+.sidebar-buttons {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    margin-bottom: 0.6rem;
+    border-bottom: var(--border-color) solid 1px;
+}
+
+.sidebar-buttons .tasks-button,
+.sidebar-buttons .calendar-button {
+    background-color: #007bff;
+    border: none;
+    border-radius: 0.4rem;
+    margin: 0.2rem;
+    padding: 0.2rem;
+    color: white;
+}
+
 .category-item {
     display: flex;
     justify-content: space-between;
