@@ -20,6 +20,9 @@ const useTaskManager = () => {
 
     const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
+
+    // Aplicar el tema al cargar
+    document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
 
   // Solicitar permisos para las notificaciones
@@ -60,6 +63,9 @@ const useTaskManager = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     localStorage.setItem("theme", newTheme);
+
+    // Aplicar el nuevo tema al documento
+    document.documentElement.setAttribute('data-theme', newTheme);
   };
 
   // Agregar tarea
