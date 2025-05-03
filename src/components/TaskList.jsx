@@ -1,5 +1,4 @@
-// src/components/TaskList.jsx
-import { useState, useEffect } from "react";
+import { useReducer, useEffect } from "react";
 import "../styles/TaskList.css";
 import Sidebar from "./Sidebar";
 import Modal from "./Modal";
@@ -8,6 +7,51 @@ import Tabs from "./Tabs";
 import TaskListSection from "../components/TaskListSection";
 import CalendarView from "../components/CalendarView";
 import { useTaskManagerContext } from "../context/TaskManagerContext";
+
+const initialState = {
+  showModal: false,
+  newTask: "",
+  description: "",
+  category: "Trabajo",
+  dueDate: "",
+  notificationDateTime: "",
+  activeTab: "Pendientes",
+  activeCategory: "Todas",
+  editTaskData: null,
+  newCategory: "",
+  showCalendar: false,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "TOGGLE_MODAL":
+      return { ...state, showModal: !state.showModal };
+    case "SET_ACTIVE_TAB":
+      return { ...state, activeTab: action.payload };
+    case "SET_ACTIVE_CATEGORY":
+      return { ...state, activeCategory: action.payload };
+    case "SET_NEW_TASK":
+      return { ...state, newTask: action.payload };
+    case "SET_DESCRIPTION":
+      return { ...state, description: action.payload };
+    case "SET_CATEGORY":
+      return { ...state, category: action.payload };
+    case "SET_DUE_DATE":
+      return { ...state, dueDate: action.payload };
+    case "SET_NOTIFICATION":
+      return { ...state, notificationDateTime: action.payload };
+    case "SET_EDIT_TASK":
+      return { ...state, editTaskData: action.payload };
+    case "CLOSE_EDIT_MODAL":
+      return { ...state, editTaskData: null };
+    case "SET_NEW_CATEGORY":
+      return { ...state, newCategory: action.payload };
+    case "TOGGLE_CALENDAR":
+      return { ...state, showCalendar: action.payload };
+    default:
+      return state;
+  }
+};
 
 function TaskList() {
   const {
@@ -22,76 +66,36 @@ function TaskList() {
     deleteCategory,
   } = useTaskManagerContext();
 
-  const [showModal, setShowModal] = useState(false);
-  const [newTask, setNewTask] = useState("");
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("Trabajo");
-  const [dueDate, setDueDate] = useState("");
-  const [notificationDateTime, setNotificationDateTime] = useState("");
-
-  const [activeTab, setActiveTab] = useState("Pendientes");
-  const [activeCategory, setActiveCategory] = useState("Todas");
-  const [editTaskData, setEditTaskData] = useState(null);
-  const [newCategory, setNewCategory] = useState("");
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const filteredTasks = tasks
-    .filter(task => (activeTab === "Pendientes" ? !task.completed : task.completed))
-    .filter(task => activeCategory === "Todas" || task.category === activeCategory)
+    .filter(task => (state.activeTab === "Pendientes" ? !task.completed : task.completed))
+    .filter(task => state.activeCategory === "Todas" || task.category === state.activeCategory)
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
 
   useEffect(() => {
     document.body.setAttribute("data-theme", theme);
   }, [theme]);
 
-  const handleInputChange = (e) => setNewTask(e.target.value);
-  const handleDescriptionChange = (e) => setDescription(e.target.value);
-  const handleCategoryChange = (e) => setCategory(e.target.value);
-  const handleDateChange = (e) => setDueDate(e.target.value);
-  const handleNotificationChange = (e) => setNotificationDateTime(e.target.value);
-
   const handleSubmit = () => {
-    if (newTask.trim() !== "") {
+    if (state.newTask.trim() !== "") {
       const taskToAdd = {
         id: Date.now(),
-        name: newTask,
-        category,
-        dueDate: dueDate || "2099-12-31",
-        notificationDateTime: notificationDateTime || null,
-        description,
+        name: state.newTask,
+        category: state.category,
+        dueDate: state.dueDate || "2099-12-31",
+        notificationDateTime: state.notificationDateTime || null,
+        description: state.description,
         completed: false,
       };
       addTask(taskToAdd);
-      setNewTask("");
-      setDescription("");
-      setCategory("Trabajo");
-      setDueDate("");
-      setNotificationDateTime("");
-      setShowModal(false);
+      dispatch({ type: "TOGGLE_MODAL" });
+      dispatch({ type: "SET_NEW_TASK", payload: "" });
+      dispatch({ type: "SET_DESCRIPTION", payload: "" });
+      dispatch({ type: "SET_CATEGORY", payload: "Trabajo" });
+      dispatch({ type: "SET_DUE_DATE", payload: "" });
+      dispatch({ type: "SET_NOTIFICATION", payload: "" });
     }
-  };
-
-  const handleEditTask = (id) => {
-    const taskToEdit = tasks.find((task) => task.id === id);
-    if (taskToEdit) {
-      setEditTaskData(taskToEdit);
-    }
-  };
-
-  const handleSaveEdit = () => {
-    editTask(editTaskData);
-    setEditTaskData(null);
-  };
-
-  const handleCloseEditModal = () => setEditTaskData(null);
-
-  const handleAddCategory = () => {
-    addCategory(newCategory);
-    setNewCategory("");
-  };
-
-  const handleToggleCalendar = (showCalendarView) => {
-    setShowCalendar(showCalendarView);
   };
 
   const handleTaskDateChange = (taskId, newDate) => {
@@ -106,71 +110,77 @@ function TaskList() {
       <div className="layout">
         <Sidebar
           categories={categories}
-          activeCategory={activeCategory}
-          onCategoryChange={setActiveCategory}
-          newCategory={newCategory}
-          setNewCategory={setNewCategory}
-          onAddCategory={handleAddCategory}
+          activeCategory={state.activeCategory}
+          onCategoryChange={(category) => dispatch({ type: "SET_ACTIVE_CATEGORY", payload: category })}
+          newCategory={state.newCategory}
+          setNewCategory={(e) => dispatch({ type: "SET_NEW_CATEGORY", payload: e.target.value })}
+          onAddCategory={() => {
+            addCategory(state.newCategory);
+            dispatch({ type: "SET_NEW_CATEGORY", payload: "" });
+          }}
           onDeleteCategory={deleteCategory}
-          onToggleCalendar={handleToggleCalendar}
+          onToggleCalendar={(showCalendarView) => dispatch({ type: "TOGGLE_CALENDAR", payload: showCalendarView })}
         />
         <main className="task-content">
-          {showCalendar ? (
+          {state.showCalendar ? (
             <CalendarView tasks={tasks} onTaskDateChange={handleTaskDateChange} />
           ) : (
             <>
-              <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
-              <button className="new-task-button" onClick={() => setShowModal(!showModal)}>
+              <Tabs activeTab={state.activeTab} onTabChange={(tab) => dispatch({ type: "SET_ACTIVE_TAB", payload: tab })} />
+              <button className="new-task-button" onClick={() => dispatch({ type: "TOGGLE_MODAL" })}>
                 Nueva tarea
               </button>
               <TaskListSection
                 tasks={filteredTasks}
-                activeTab={activeTab}
-                activeCategory={activeCategory}
+                activeTab={state.activeTab}
+                activeCategory={state.activeCategory}
                 onComplete={toggleTaskCompletion}
-                onEdit={handleEditTask}
+                onEdit={(id) => dispatch({ type: "SET_EDIT_TASK", payload: tasks.find(task => task.id === id) })}
                 onDelete={deleteTask}
               />
             </>
           )}
 
-          {showModal && (
+          {state.showModal && (
             <Modal>
               <TaskForm
-                taskName={newTask}
-                description={description}
-                category={category}
-                dueDate={dueDate}
-                notificationDateTime={notificationDateTime}
+                taskName={state.newTask}
+                description={state.description}
+                category={state.category}
+                dueDate={state.dueDate}
+                notificationDateTime={state.notificationDateTime}
                 categories={categories}
-                onNameChange={handleInputChange}
-                onDescriptionChange={handleDescriptionChange}
-                onCategoryChange={handleCategoryChange}
-                onDateChange={handleDateChange}
-                onNotificationChange={handleNotificationChange}
+                onNameChange={(e) => dispatch({ type: "SET_NEW_TASK", payload: e.target.value })}
+                onDescriptionChange={(e) => dispatch({ type: "SET_DESCRIPTION", payload: e.target.value })}
+                onCategoryChange={(e) => dispatch({ type: "SET_CATEGORY", payload: e.target.value })}
+                onDateChange={(e) => dispatch({ type: "SET_DUE_DATE", payload: e.target.value })}
+                onNotificationChange={(e) => dispatch({ type: "SET_NOTIFICATION", payload: e.target.value })}
                 onSubmit={handleSubmit}
-                onClose={() => setShowModal(false)}
+                onClose={() => dispatch({ type: "TOGGLE_MODAL" })}
                 isEditing={false}
               />
             </Modal>
           )}
 
-          {editTaskData && (
+          {state.editTaskData && (
             <Modal>
               <TaskForm
-                taskName={editTaskData.name}
-                description={editTaskData.description || ""}
-                category={editTaskData.category}
-                dueDate={editTaskData.dueDate}
-                notificationDateTime={editTaskData.notificationDateTime || ""}
+                taskName={state.editTaskData.name}
+                description={state.editTaskData.description || ""}
+                category={state.editTaskData.category}
+                dueDate={state.editTaskData.dueDate}
+                notificationDateTime={state.editTaskData.notificationDateTime || ""}
                 categories={categories}
-                onNameChange={(e) => setEditTaskData({ ...editTaskData, name: e.target.value })}
-                onDescriptionChange={(e) => setEditTaskData({ ...editTaskData, description: e.target.value })}
-                onCategoryChange={(e) => setEditTaskData({ ...editTaskData, category: e.target.value })}
-                onDateChange={(e) => setEditTaskData({ ...editTaskData, dueDate: e.target.value })}
-                onNotificationChange={(e) => setEditTaskData({ ...editTaskData, notificationDateTime: e.target.value })}
-                onSubmit={handleSaveEdit}
-                onClose={handleCloseEditModal}
+                onNameChange={(e) => dispatch({ type: "SET_EDIT_TASK", payload: { ...state.editTaskData, name: e.target.value } })}
+                onDescriptionChange={(e) => dispatch({ type: "SET_EDIT_TASK", payload: { ...state.editTaskData, description: e.target.value } })}
+                onCategoryChange={(e) => dispatch({ type: "SET_EDIT_TASK", payload: { ...state.editTaskData, category: e.target.value } })}
+                onDateChange={(e) => dispatch({ type: "SET_EDIT_TASK", payload: { ...state.editTaskData, dueDate: e.target.value } })}
+                onNotificationChange={(e) => dispatch({ type: "SET_EDIT_TASK", payload: { ...state.editTaskData, notificationDateTime: e.target.value } })}
+                onSubmit={() => {
+                  editTask(state.editTaskData);
+                  dispatch({ type: "CLOSE_EDIT_MODAL" });
+                }}
+                onClose={() => dispatch({ type: "CLOSE_EDIT_MODAL" })}
                 isEditing={true}
               />
             </Modal>
