@@ -1,103 +1,246 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600&display=swap');
 
-/* 🌍 Variables globales */
+/* 📌 Variables globales */
 :root {
-    --bg-color: #ffffff;
-    --text-color: #333;
-    --task-bg: #ececec;
-    --border-color: #d4d4d4;
-    --button-bg: #007bff;
-    --button-hover: #0056b3;
-    --modal-bg: #ffffff;
-    --modal-text: #333;
-    --sidebar-btn-hover: #c2c2c2;
+  --bg-color: #ffffff;
+  --text-color: #333;
+  --task-bg: #ececec;
+  --border-color: #d4d4d4;
+  --button-bg: #007bff;
+  --button-hover: #0056b3;
+  --modal-bg: #ffffff;
+  --modal-text: #333;
+  --sidebar-btn-hover: #c2c2c2;
 }
 
 /* 📌 Variables para modo oscuro */
 [data-theme="dark"] {
-    --bg-color: #181818;
-    --text-color: #f5f5f5;
-    --task-bg: #444;
-    --border-color: #555;
-    --button-bg: #007bff;
-    --button-hover: #0056b3;
-    --modal-bg: #222;
-    --modal-text: #f5f5f5;
-    --sidebar-btn-hover: #646464;
+  --bg-color: #181818;
+  --text-color: #f5f5f5;
+  --task-bg: #444;
+  --border-color: #555;
+  --button-bg: #007bff;
+  --button-hover: #0056b3;
+  --modal-bg: #222;
+  --modal-text: #f5f5f5;
+  --sidebar-btn-hover: #646464;
 }
 
 /* 📌 Fuente global */
 * {
-    font-family: 'Nunito', sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
+/* 📌 Estilos generales */
 body {
-    margin: 0;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
 }
 
-.projects-container {
-    padding: 2rem;
-  }
-  
-  .projects-gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-  }
-  
-  .project-card {
-    background-color: var(--task-bg);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-  }
-  
-  .project-header {
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .project-detail-view {
-    padding: 2rem;
-  }
-  
-  .project-detail {
-    background-color: var(--task-bg);
-    padding: 2rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  textarea {
-    box-sizing: border-box;
-    width: 100%;
-    height: 8rem;
-    margin-top: 1rem;
-    padding: 1rem;
-    border-radius: 4px;
-    border: 1px solid var(--border-color);
-    resize: vertical;
-    background-color: var(--bg-color);
-  }
-  
-  
-  .delete-btn {
-    background-color: #e74c3c;
-    color: white;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    margin-top: 2rem;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s ease;
-  }
-  
-  .delete-btn:hover {
-    background-color: #c0392b;
-  }
+/* 📌 Botones */
+button {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--button-bg);
+  color: white;
+  transition: background 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+}
+
+/* 📌 Contenedor de detalles del proyecto */
+.project-details {
+  background: var(--modal-bg);
+  color: var(--modal-text);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: auto;
+}
+
+/* 📌 Estilos de edición */
+.project-details input,
+.project-details textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+}
+
+/* 📌 Galería de imágenes */
+.project-images {
+  margin-top: 20px;
+}
+
+.image-gallery {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.image-container {
+  position: relative;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+/* 📌 Input para agregar imágenes desde URL */
+.image-url-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.image-url-input input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+}
+
+.image-url-input button {
+  padding: 8px;
+}
+
+/* Botones en modo edición */
+.button-container {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* Alinea a la derecha */
+}
+
+.image-options {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.image-url-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.image-url-input input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+}
+
+.image-url-input button {
+  padding: 8px;
+}
+
+/* 📌 Sección de tareas */
+.project-tasks {
+  margin-top: 20px;
+  padding: 15px;
+  background: var(--task-bg);
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 Input para agregar tareas */
+.task-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.task-input input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+}
+
+.task-input button {
+  padding: 8px;
+  font-size: 18px;
+}
+
+/* 📌 Lista de tareas */
+.task-list {
+  list-style: none;
+  padding: 0;
+}
+
+.task-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: var(--modal-bg);
+  border-radius: 5px;
+  margin-bottom: 8px;
+  transition: background 0.2s ease-in-out;
+}
+
+.task-list li.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.task-list li:hover {
+  background: var(--sidebar-btn-hover);
+}
+
+/* 📌 Botón de eliminar tarea */
+.delete-btn {
+  background: red;
+  color: white;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+/* 📌 Área de edición con separación visual */
+.editing-area {
+  margin-top: 15px;
+  padding: 15px;
+  background: var(--task-bg);
+  border-radius: 8px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 📌 Inputs en edición */
+.editing-area input,
+.editing-area textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+}
