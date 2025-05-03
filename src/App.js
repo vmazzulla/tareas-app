@@ -3,24 +3,27 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import TaskList from "./components/TaskList";
 import Projects from "./pages/Projects";
 import { TaskManagerProvider } from "./context/TaskManagerContext";
-import Header from "./components/Header";  // Importar Header aquí
-import useTaskManager from "./hooks/useTaskManager";  // Importar el hook
+import { ProjectManagerProvider } from "./context/ProjectManagerContext";  // ✅ Agregamos el provider de proyectos
+import Header from "./components/Header";  
+import useTaskManager from "./hooks/useTaskManager";  
 
 function App() {
   const {
-    theme, // El estado del tema
-    toggleTheme, // Función para cambiar el tema
-  } = useTaskManager(); // Llamar al hook
+    theme, 
+    toggleTheme, 
+  } = useTaskManager();  
 
   return (
     <TaskManagerProvider>
-      <Router>
-        <Header theme={theme} toggleTheme={toggleTheme} /> {/* Pasar el tema y la función al Header */}
-        <Routes>
-          <Route path="/" element={<TaskList />} />
-          <Route path="/proyectos" element={<Projects />} />
-        </Routes>
-      </Router>
+      <ProjectManagerProvider> {/* ✅ Ahora los proyectos tienen su propio contexto */}
+        <Router>
+          <Header theme={theme} toggleTheme={toggleTheme} />
+          <Routes>
+            <Route path="/" element={<TaskList />} />
+            <Route path="/proyectos" element={<Projects />} />
+          </Routes>
+        </Router>
+      </ProjectManagerProvider>
     </TaskManagerProvider>
   );
 }
